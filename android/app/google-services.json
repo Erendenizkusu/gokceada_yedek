@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "919333673755",
+    "firebase_url": "https://gokceada-688c7-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "gokceada-688c7",
+    "storage_bucket": "gokceada-688c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919333673755:android:556e785f5fae57dc1051be",
+        "android_client_info": {
+          "package_name": "com.gokceada.gokceadarehber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919333673755-6vo1vump3668v5fle8b308djvj1v0btt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gokceada.gokceadarehber",
+            "certificate_hash": "364dae21c2fd368c302f359314a25693c01a3313"
+          }
+        },
+        {
+          "client_id": "919333673755-tqrrbhogesci1ekj9p3dvtds64qckul9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPFd-5utIlJQbFC7WcjuQpNNpttDvYEps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "919333673755-9ujfdvhsocvvbra2fv58qrrqrson1isi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "919333673755-164bj9pbkik44jr7m5l6vca0lu6r0f15.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gokceada.gokceadarehber.gokceada"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-2707472203466324~9651334474"
+    }
+  ],
+  "configuration_version": "1"
+}

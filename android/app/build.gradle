@@ -1,0 +1,73 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+android {
+    namespace "com.gokceada.gokceadarehber"
+    compileSdk 34
+    ndkVersion "26.1.10909125"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        "-Xlint:unchecked"
+        "-Xlint:deprecation"
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        applicationId "com.gokceada.gokceadarehber"
+        multiDexEnabled true
+        minSdk = 23
+        targetSdk = 34//flutter.targetSdkVersion
+        versionCode = 12
+        versionName = '1.2.0'
+    }
+
+    signingConfigs {
+        mySigningConfig {
+            keyAlias 'myAlias'
+            keyPassword 'Oo11qq22ww+'
+            storeFile file('C:\\keystore\\keystore.jks')
+            storePassword 'Oo11qq22ww+'
+        }
+    }
+
+
+    buildTypes {
+
+        release {
+            signingConfig signingConfigs.mySigningConfig
+        }
+    }
+
+
+    flutter {
+        source '../..'
+    }
+
+    dependencies {
+        implementation "com.google.android.gms:play-services-location:21.3.0"
+        implementation 'com.google.firebase:firebase-storage:21.0.0'
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0"
+        implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    }
+}
