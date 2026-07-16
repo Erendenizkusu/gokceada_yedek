@@ -12,7 +12,7 @@
   "feribotSaatleri": "Orare Feryboat",
   "hediyelikEsyalar": "Suveniruri",
   "gezilecekKoyler": "SATE DE VIZITAT:\n",
-  "koylarSahiller":  "GOLFURI ȘI PLAJE:\n",
+  "koylarSahiller": "GOLFURI ȘI PLAJE:\n",
   "gezilecekKoylerAciklama": "Kaleköy: Este un vechi sat grecesc cu un mic port unic. Aici se găsesc multe restaurante și cafenele. Seara, puteți să vă plimbați, să savurați o înghețată și să cumpărați suveniruri.\n\nYukarı Kaleköy: Unul dintre satele cu cea mai frumoasă priveliște de pe insulă. În față se află insula Samothraki, iar satul Kaleköy este construit pe un deal cu ruinele unei cetăți. Chiar sub el se află portul Kaleköy. Datorită poziției sale înalte, acest loc poate fi considerat „balconul” insulei. Este locul ideal pentru a privi apusul.\n\nZeytinli: Acest sat, situat la doar 3 km de centru, are străzi pavate cu piatră bine conservate și case vechi grecești. Este renumit pentru cafeaua Dibek și pentru deserturile sale. Cele mai bune alegeri pentru desert sunt prăjitura Zeytinliköy și budinca cu mastică.\n\nTepeköy: Este cel mai înalt dintre satele grecești. Copacul istoric de 625 de ani și zona de picnic din apropiere merită văzute. La baza copacului se află și o fântână istorică. Pentru cei interesați de cultura tavernei, aici există câteva locuri excelente. De asemenea, aici se produc vinuri de calitate.\n\nDereköy: Cândva a fost cel mai mare și cel mai populat sat din Turcia, cu 1.950 de case. Avea 22 de cafenele, 2 cinematografe, multe frizerii, magazine alimentare, croitori și 3 fabrici de ulei de măsline. Astăzi, satul oferă câteva opțiuni de cazare, un restaurant rustic unde se poate mânca carne de capră la cuptor și o cafenea amenajată în grădina unei vechi case grecești restaurate.\n\n",
   "koylarSahillerAciklama": "Yıldızkoy: Este aproape singurul golf de pe coasta nordică a insulei unde se poate înota. De asemenea, se află în primul și singurul parc național subacvatic din Turcia. Este singurul golf din parc unde se poate intra în apă de pe uscat. Înotul cu snorkelul în această zonă protejată, unde flora și fauna marină sunt sub protecție, va fi o experiență unică.\n\nPlaja Kuzulimanı: Kuzulimanı, unde acostează feribotul, are o plajă lungă și lată de nisip. Aici există, de asemenea, o unitate care oferă șezlonguri, umbrele și servicii de cafe-bar.\n\nPlaja Aydıncık (Kefaloz): Aceasta este plaja cu cele mai multe facilități de pe insula Gökçeada. Plaja are o lungime de 1200 de metri și este formată din nisip. Este cea mai populară plajă de pe insulă în timpul verii. Vă puteți relaxa pe un șezlong și puteți privi surferii. Dacă doriți să încercați surfingul, există afaceri care oferă lecții. Dacă vă place nisipul și aveți copii, această plajă cu ape puțin adânci este ideală pentru dumneavoastră.\n\nLaz Koyu: Laz Koyu este un mic golf pitoresc pe coasta sudică a insulei Gökçeada. După ce conduceți 300 de metri pe un drum de pământ, veți ajunge la un golf de o frumusețe uimitoare. În golf există o unitate unde puteți închiria umbrele și șezlonguri și puteți savura o masă.\n\nGizli Liman: Puteți ajunge la Gizli Liman trecând prin satul Uğurlu. Apare ca o surpriză plăcută când virați la dreapta de la portul de pescuit. Acesta este cel mai îndepărtat punct pe care îl puteți atinge în extremitatea vestică a insulei. Este un golf paradisiac care se întinde în fața pădurilor de pini. Localnicii oferă servicii de bufet, toalete și dușuri în golf. Satul Uğurlu este foarte aproape pentru cumpărături.\n\n",
   "barlar": "Baruri",
@@ -82,5 +82,16 @@
   "permissionDeniedSettings": "Accesează setările",
   "haritaSec": "Alegeți Aplicația de Hărți",
   "hangiHarita": "Cu ce aplicație de hărți doriți să deschideți?",
-  "dahaFazlaBilgi": "Puteți, vizita site-ul pentru mai multe informații."
+  "dahaFazlaBilgi": "Puteți, vizita site-ul pentru mai multe informații.",
+  "bilgiYuklenemedi": "Informațiile nu au putut fi încărcate. Încercați din nou.",
+  "kayitBulunamadi": "Încă nu există înregistrări.",
+  "guncelHaberler": "Știri recente",
+  "kahvaltiAlanlari": "Locuri pentru mic dejun",
+  "qrMenuBulunmuyor": "Nu există informații despre meniu pentru acest restaurant.",
+  "qrMenuBulunamadi": "Meniul QR nu a fost găsit!",
+  "tamam": "OK",
+  "kesfet": "Explorează",
+  "adayiTani": "Despre insulă",
+  "adaEtiketi": "Marea Egee de Nord · Insulă Cittaslow",
+  "tumu": "Toate"
 }

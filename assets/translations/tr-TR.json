@@ -82,5 +82,16 @@
   "permissionDeniedSettings": "Ayarlara git",
   "haritaSec": "Harita Uygulaması Seç",
   "hangiHarita": "Hangi harita uygulamasıyla açmak istersiniz?",
-  "dahaFazlaBilgi": "Daha fazla bilgi almak için için web siteyi ziyaret edebilirsiniz."
+  "dahaFazlaBilgi": "Daha fazla bilgi almak için için web siteyi ziyaret edebilirsiniz.",
+  "bilgiYuklenemedi": "Bilgiler yüklenemedi. Lütfen tekrar deneyin.",
+  "kayitBulunamadi": "Henüz kayıt bulunmuyor.",
+  "guncelHaberler": "Güncel Haberler",
+  "kahvaltiAlanlari": "Kahvaltı Alanları",
+  "qrMenuBulunmuyor": "Bu restoran için menü bilgisi bulunmuyor.",
+  "qrMenuBulunamadi": "QR Menü Bulunamadı!",
+  "tamam": "Tamam",
+  "kesfet": "Keşfet",
+  "adayiTani": "Adayı Tanı",
+  "adaEtiketi": "Kuzey Ege · Cittaslow Ada",
+  "tumu": "Tümü"
 }

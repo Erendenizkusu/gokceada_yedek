@@ -82,5 +82,16 @@
   "permissionDeniedSettings": "Go to settings",
   "haritaSec": "Choose Map Application",
   "hangiHarita": "Which map application would you like to open?",
-  "dahaFazlaBilgi": "You can visit the website for more information."
+  "dahaFazlaBilgi": "You can visit the website for more information.",
+  "bilgiYuklenemedi": "Couldn't load the information. Please try again.",
+  "kayitBulunamadi": "No records yet.",
+  "guncelHaberler": "Latest News",
+  "kahvaltiAlanlari": "Breakfast Spots",
+  "qrMenuBulunmuyor": "No menu information is available for this restaurant.",
+  "qrMenuBulunamadi": "QR Menu Not Found!",
+  "tamam": "OK",
+  "kesfet": "Explore",
+  "adayiTani": "About the Island",
+  "adaEtiketi": "North Aegean · Cittaslow Island",
+  "tumu": "See all"
 }

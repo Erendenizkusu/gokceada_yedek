@@ -1,115 +1,68 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:gokceada/screens/hotel_rooms.dart';
 import '../core/colors.dart';
 import '../core/textFont.dart';
+import '../models/listing.dart';
 import '../product/hotelListCard.dart';
+import '../product/listing_list_view.dart';
+import '../providers/listing_provider.dart';
 
-
-class OtelDetay extends StatefulWidget {
+class OtelDetay extends StatelessWidget {
   const OtelDetay({super.key});
 
   @override
-  _OtelDetayState createState() => _OtelDetayState();
-}
-
-class _OtelDetayState extends State<OtelDetay> {
-  List<Widget> hotels = [];
-  List<Widget> hotelsList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getOtelList();
-  }
-
-  void getOtelList() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('hotelList').get();
-
-      for (var doc in querySnapshot.docs) {
-        List<String> icon = List<String>.from(doc['icon']);
-        String owner = doc['owner'];
-        List<String> info = List<String>.from(doc['info']);
-        String description = doc['description'];
-        String rating = doc['rating'];
-        String hotelName = doc['hotel_name'];
-        String location = doc['location'];
-        String telNo = doc['telNo'];
-        List<double> latLng = List<double>.from(doc['latLng']);
-        String image = doc['image'];
-
-
-        List<ContainerMiddle> facilitiesList = [];
-        for(int i = 0; i < icon.length; i++){
-          IconData iconData = IconsExtension.getIcon(icon[i]);
-          facilitiesList.add(ContainerMiddle(icon: iconData, info: info[i]));
-        }
-
-        Widget hotelListWidget = HotelListCard(
-          hotelName: hotelName,
-          location: location,
-          rating: rating,
-          path: image,
-        );
-
-        Widget hotelWidget = HotelRoomsView(
-          latitude: latLng[0],
-          longitude: latLng[1],
-          owner: owner,
-          facilities: facilitiesList,
-          description: description,
-          hotelName: hotelName,
-          location: location,
-          telNo: telNo,
-          path: image,
-        );
-
-        setState(() {
-          hotels.add(hotelWidget);
-          hotelsList.add(hotelListWidget);
-        });
-      }
-    } catch (error) {
-      print('Error getting hotel list: $error');
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.7,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(Icons.arrow_back_ios_new, color: ColorConstants.instance.titleColor),
+    return ChangeNotifierProvider(
+      create: (_) => ListingProvider()..load('hotelList', nameKey: 'hotel_name'),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.7,
+          leading: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: Icon(Icons.arrow_back_ios_new,
+                color: ColorConstants.instance.titleColor),
+          ),
+          title: Text('oteller'.tr(), style: TextFonts.instance.titleFont),
         ),
-        title: Text('Oteller', style: TextFonts.instance.titleFont),
-      ),
-      body: ListView.builder(
-        itemCount: hotels.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => hotels[index],
-                ),
-              );
-            },
-            child: hotelsList[index],
-          );
-        },
+        body: ListingListView(
+          card: (context, l) => HotelListCard(
+            hotelName: l.name,
+            location: l.location,
+            rating: l.rating,
+            path: l.image,
+          ),
+          detail: (context, l) => HotelRoomsView(
+            latitude: l.latitude,
+            longitude: l.longitude,
+            owner: l.owner,
+            facilities: _facilities(l),
+            description: l.description,
+            hotelName: l.name,
+            location: l.location,
+            telNo: l.telNo,
+            path: l.image,
+          ),
+        ),
       ),
     );
   }
-
 }
 
+/// Builds the amenity icon row from the listing's parallel `icon` + `info`
+/// arrays, tolerating length mismatches.
+List<ContainerMiddle> _facilities(Listing l) {
+  final facilities = <ContainerMiddle>[];
+  for (int i = 0; i < l.icons.length; i++) {
+    final info = i < l.info.length ? l.info[i] : '';
+    facilities.add(
+      ContainerMiddle(icon: IconsExtension.getIcon(l.icons[i]), info: info),
+    );
+  }
+  return facilities;
+}
 
 class IconsExtension {
   static IconData getIcon(String iconName) {

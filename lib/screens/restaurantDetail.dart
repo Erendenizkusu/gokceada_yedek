@@ -94,7 +94,7 @@ class _RestaurantViewState extends State<RestaurantView> {
               InkwellUnderline(
                   name: 'QR Menu',
                   onTap: widget.link != '' ? () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => WebViewComponent(url: url, title: 'QR MENU')),
                     );
@@ -103,16 +103,15 @@ class _RestaurantViewState extends State<RestaurantView> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          content: const Text('Bu Restorant İçin Menu Bilgisi Bulunmuyor..'),
-                          title: const Text('Qr Menu Bulunmadı!'),
+                          content: Text('qrMenuBulunmuyor'.tr()),
+                          title: Text('qrMenuBulunamadi'.tr()),
                           backgroundColor: ColorConstants.instance.lightGreyCardCollor,
                           actions: [
                             TextButton(
                               onPressed: () {
-                                // Tamam butonuna tıklandığında yapılacak işlemler
-                                Navigator.of(context).pop(); // Bildirimi kapat
+                                Navigator.of(context).pop();
                               },
-                              child: Text('Tamam', style: TextFonts.instance.commentTextThin),
+                              child: Text('tamam'.tr(), style: TextFonts.instance.commentTextThin),
                             ),
                           ],
                         );

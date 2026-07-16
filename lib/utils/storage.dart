@@ -133,26 +133,7 @@ class Storage {
         Navigator.pushReplacementNamed(context, '/homepage');
       }
     } catch(e){
-      debugPrint('');
+      debugPrint('Fotoğraf silinirken hata oluştu: $e');
     }
   }
-
-
-/*
-  Future<List<String>> getFolderList(String userId) async {
-    List<String> folderList = [];
-
-    try {
-      firebase_storage.ListResult result = await storage.ref('users').child(userId).listAll();
-      for (var ref in result.prefixes) {
-        String folderName = ref.fullPath.split('/').last;
-        folderList.add(folderName);
-        print(folderList.toString());
-      }
-    } catch (e) {
-      debugPrint('getFolderList Hata: $e');
-    }
-
-    return folderList;
-  }*/
 }

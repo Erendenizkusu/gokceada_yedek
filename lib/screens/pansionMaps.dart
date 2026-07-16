@@ -1,109 +1,63 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:gokceada/product/PansionListCard.dart';
 import 'package:gokceada/screens/pansionDetail.dart';
 import '../core/colors.dart';
 import '../core/textFont.dart';
+import '../product/listing_list_view.dart';
+import '../providers/listing_provider.dart';
 import 'hotel_rooms.dart';
 import 'hotelsMap.dart';
 
-class PansionDetay extends StatefulWidget {
+class PansionDetay extends StatelessWidget {
   const PansionDetay({super.key});
 
   @override
-  PansionDetayState createState() => PansionDetayState();
-}
-
-class PansionDetayState extends State<PansionDetay> {
-  List<Widget> pansions = [];
-  List<Widget> pansionList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getPansionList();
-  }
-
-  void getPansionList() {
-    FirebaseFirestore.instance.collection('pansionList').get().then((querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        List<String> icon = List<String>.from(doc['icon']);
-        String owner = doc['owner'];
-        List<String> info = List<String>.from(doc['info']);
-        String description = doc['description'];
-        String pansionName = doc['pansion_name'];
-        String image = doc['image'];
-        String location = doc['location'];
-        String telNo = doc['telNo'];
-        String rating = doc['rating'];
-        List<ContainerMiddle> facilitiesList = [];
-        List<double> latLng = List<double>.from(doc['latLng']);
-
-        for (int i = 0; i < icon.length; i++) {
-          IconData iconData = IconsExtension.getIcon(icon[i]);
-          facilitiesList.add(ContainerMiddle(icon: iconData, info: info[i]));
-        }
-
-        Widget pansionListWidget = PansionListCard(
-            hotelName: pansionName,
-            location: location,
-            rating: rating,
-            path: image);
-
-        Widget pansionWidget = PansionDetailView(
-          latitude: latLng[0],
-          longitude: latLng[1],
-          owner: owner,
-          facilities: facilitiesList,
-          description: description,
-          pansion_name: pansionName,
-          path: image,
-          location: location,
-          telNo: telNo,
-          rating: rating,
-        );
-
-        setState(() {
-          pansions.add(pansionWidget);
-          pansionList.add(pansionListWidget);
-        });
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.7,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(Icons.arrow_back_ios_new, color: ColorConstants.instance.titleColor,),
+    return ChangeNotifierProvider(
+      create: (_) =>
+          ListingProvider()..load('pansionList', nameKey: 'pansion_name'),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.7,
+          leading: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: Icon(Icons.arrow_back_ios_new,
+                color: ColorConstants.instance.titleColor),
+          ),
+          title: Text('pansionlar'.tr(), style: TextFonts.instance.titleFont),
         ),
-        title: Text('pansionlar'.tr(), style: TextFonts.instance.titleFont),
-      ),
-      body: ListView.builder(
-        itemCount: pansions.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => pansions[index],
-                ),
-              );
-            },
-            child: pansionList[index],
-          );
-        },
+        body: ListingListView(
+          card: (context, l) => PansionListCard(
+            hotelName: l.name,
+            location: l.location,
+            rating: l.rating,
+            path: l.image,
+          ),
+          detail: (context, l) {
+            final facilities = <ContainerMiddle>[];
+            for (int i = 0; i < l.icons.length; i++) {
+              final info = i < l.info.length ? l.info[i] : '';
+              facilities.add(ContainerMiddle(
+                  icon: IconsExtension.getIcon(l.icons[i]), info: info));
+            }
+            return PansionDetailView(
+              latitude: l.latitude,
+              longitude: l.longitude,
+              owner: l.owner,
+              facilities: facilities,
+              description: l.description,
+              pansion_name: l.name,
+              path: l.image,
+              location: l.location,
+              telNo: l.telNo,
+              rating: l.rating,
+            );
+          },
+        ),
       ),
     );
   }
-  
 }
-

@@ -25,15 +25,14 @@ class GoogleAds with ChangeNotifier {
       throw UnsupportedError('Platform not supported');
     }
   }
-  void loadInterstitialAd({bool showAfterLoad = false}) {
+  void loadInterstitialAd({bool showAfterLoad = true}) {
     InterstitialAd.load(
         adUnitId: interstitialAdUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
-            showAfterLoad = true;
             interstitialAd = ad;
-            if(showAfterLoad) showInterstitialAd();
+            if (showAfterLoad) showInterstitialAd();
           },
           onAdFailedToLoad: (LoadAdError error) {
           },

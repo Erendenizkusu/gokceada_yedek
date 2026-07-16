@@ -1,7 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:gokceada/core/colors.dart';
+import 'package:gokceada/core/textFont.dart';
+import 'package:gokceada/providers/news_provider.dart';
+import 'package:gokceada/services/google_ads.dart';
 import 'package:gokceada/pages/login_register_page.dart';
 import 'package:gokceada/screens/barlarMap.dart';
 import 'package:gokceada/screens/cafelerMap.dart';
@@ -58,19 +62,18 @@ class _GokceadaState extends State<Gokceada> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(
-            color: ColorConstants.instance.commentColor,
-          ),
-        ),
-      ),
-      title: 'Gokceada',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => GoogleAds()),
+        ChangeNotifierProvider(create: (_) => NewsProvider()..load()),
+      ],
+      child: MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        debugShowCheckedModeBanner: false,
+        theme: _buildTheme(),
+        title: 'Gokceada',
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
@@ -96,9 +99,55 @@ class _GokceadaState extends State<Gokceada> {
         '/oteller': (context) =>  const OtelDetay(),
         '/camping': (context) =>  const CampingDetay(),
         '/surfing': (context) =>  const SurfingDetay(),
-        '/bus': (context) =>  const BusTimes(),
-      },
+          '/bus': (context) => const BusTimes(),
+        },
+      ),
     );
   }
+}
+
+/// The app-wide Material 3 theme, derived from [ColorConstants]. Establishes an
+/// Aegean colour scheme, a salt-white ground, flat salt app bars, and softly
+/// rounded cards so individual screens no longer need to restyle these.
+ThemeData _buildTheme() {
+  final c = ColorConstants.instance;
+  final scheme = ColorScheme.fromSeed(
+    seedColor: c.sea,
+    primary: c.sea,
+    onPrimary: Colors.white,
+    secondary: c.seaMid,
+    onSecondary: Colors.white,
+    tertiary: c.coral,
+    onTertiary: Colors.white,
+    surface: c.shell,
+    onSurface: c.ink,
+    brightness: Brightness.light,
+  );
+
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: scheme,
+    scaffoldBackgroundColor: c.salt,
+    dividerColor: c.lightGreyCardCollor,
+    appBarTheme: AppBarTheme(
+      backgroundColor: c.salt,
+      foregroundColor: c.sea,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
+      iconTheme: IconThemeData(color: c.sea),
+      titleTextStyle: TextFonts.instance.appBarTitleColor,
+    ),
+    cardTheme: CardThemeData(
+      color: c.shell,
+      elevation: 6,
+      shadowColor: c.sea.withValues(alpha: 0.18),
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      labelStyle: TextStyle(color: c.commentColor),
+    ),
+  );
 }
 

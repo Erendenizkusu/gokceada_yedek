@@ -52,13 +52,17 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_pannable_rating_bar: ^2.7.2+1
   app_settings: ^5.1.1
-  intl: ^0.19.0
+  # intl is not used directly in lib/; let flutter_localizations pin the
+  # version that matches the active Flutter SDK (avoids SDK-specific conflicts).
+  intl: any
   shared_preferences: ^2.2.3
   provider: ^6.1.2
   easy_localization: ^3.0.7
   google_mobile_ads: ^5.1.0
   permission_handler: ^11.3.1
   webview_flutter: ^4.8.0
+  cached_network_image: 3.4.0
+  google_fonts: ^6.2.1
 
 
 

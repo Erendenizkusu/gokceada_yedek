@@ -90,7 +90,7 @@ class _CafeViewState extends State<CafeView> {
               InkwellUnderline(
                   name: 'QR Menu',
                   onTap: widget.link != '' ? () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => WebViewComponent(url: url,title: 'QR MENU',)),
                     );

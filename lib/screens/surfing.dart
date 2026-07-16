@@ -96,7 +96,7 @@ class _SurfingViewState extends State<SurfingView> {
               InkwellUnderline(
                   name: 'Website',
                   onTap: widget.link != '' ? () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => WebViewComponent(url: url,title: 'surfOkullari'.tr(),)),
                     );

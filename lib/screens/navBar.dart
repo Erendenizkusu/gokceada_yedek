@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import '../services/google_ads.dart';
 
 class NavBar extends StatefulWidget {
@@ -22,7 +23,6 @@ class _NavBarState extends State<NavBar> {
   }
 
   User? get user => auth.currentUser;
-  final GoogleAds _googleAds = GoogleAds();
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +52,8 @@ class _NavBarState extends State<NavBar> {
               title: 'neredeYenir'.tr(),
               icon: Icons.fastfood,
               path: () {
+                context.read<GoogleAds>().loadInterstitialAd();
                 Navigator.of(context).popAndPushNamed('/foodareas');
-                _googleAds.loadInterstitialAd();
               }),
           NavBarListTile(
               title: 'gormeyeDeger'.tr(),
@@ -75,15 +75,15 @@ class _NavBarState extends State<NavBar> {
               title: 'otobusSaatleri'.tr(),
               icon: Icons.directions_bus,
               path: () {
+                context.read<GoogleAds>().loadInterstitialAd();
                 Navigator.of(context).popAndPushNamed('/bus');
-                _googleAds.loadInterstitialAd();
               }),
           NavBarListTile(
               title: 'feribotSaatleri'.tr(),
               icon: Icons.directions_ferry,
               path: () {
+                context.read<GoogleAds>().loadInterstitialAd();
                 Navigator.of(context).popAndPushNamed('/fery');
-                _googleAds.loadInterstitialAd();
               }),
           NavBarListTile(
               title: 'hediyelikEsyalar'.tr(),

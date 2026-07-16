@@ -37,7 +37,7 @@ class _BusTimesState extends State<BusTimes> {
               Center(child: SizedBox(width: (MediaQuery.of(context).size.width)*0.5,child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: ColorConstants.instance.activatedButton),
                   onPressed: (){
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => WebViewComponent(url: url,title: 'otobusSaatleri'.tr(),)),
                     );
