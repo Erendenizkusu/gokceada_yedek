@@ -1,0 +1,13 @@
+{
+  "name": "gokceada-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Admin scripts for Gökçeada Cepte (run locally by the maintainer).",
+  "scripts": {
+    "refresh": "node refresh_ratings.js",
+    "refresh:dry": "node refresh_ratings.js --dry"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}

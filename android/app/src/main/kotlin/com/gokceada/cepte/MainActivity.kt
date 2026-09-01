@@ -1,4 +1,4 @@
-package com.gokceada.gokceadarehber
+package com.gokceada.cepte
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -6,14 +6,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gokceada/core/colors.dart';
 import 'package:gokceada/core/textFont.dart';
 import 'package:gokceada/product/commentButton.dart';
 import 'package:gokceada/product/commentScreen.dart';
 import 'package:gokceada/product/likeButton.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../product/indicatorWidget.dart';
 import '../product/likeCountWidget.dart';
@@ -588,45 +586,35 @@ class UsersConsoleState extends State<UsersConsole> {
                     FloatingActionButton(
                       backgroundColor: ColorConstants.instance.activatedButton,
                       onPressed: () async {
-                        var status = await Permission.photos.status;
+                        // FilePicker uses the Storage Access Framework, so no
+                        // runtime media permission (READ_MEDIA_IMAGES) is needed.
+                        final results = await FilePicker.platform.pickFiles(
+                          allowMultiple: false,
+                          type: FileType.image,
+                        );
 
-                        if (!status.isGranted) {
-                          status = await Permission.photos.request();
-                        }
+                        if (results != null) {
+                          final path = results.files.single.path;
+                          final fileName = results.files.single.name;
 
-                        if (status.isGranted) {
-                          final results = await FilePicker.platform.pickFiles(
-                            allowMultiple: false,
-                            type: FileType.image,
+                          await storage.uploadFile(
+                            path!,
+                            fileName,
+                            FirebaseAuth.instance.currentUser!.uid,
                           );
+                          getUsersImages();
 
-                          if (results != null) {
-                            final path = results.files.single.path;
-                            final fileName = results.files.single.name;
-
-                            await storage.uploadFile(
-                              path!,
-                              fileName,
-                              FirebaseAuth.instance.currentUser!.uid,
-                            );
-                            getUsersImages();
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('dosyaBasariylaYuklendi'.tr()),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('resimSecilmedi'.tr()),
-                              ),
-                            );
-                          }
-                        } else if (status.isPermanentlyDenied) {
-                          openAppSettings();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('dosyaBasariylaYuklendi'.tr()),
+                            ),
+                          );
                         } else {
-                          showAlertDialog(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('resimSecilmedi'.tr()),
+                            ),
+                          );
                         }
                       },
                       child: const Icon(Icons.upload, color: Colors.white),
@@ -643,23 +631,3 @@ class UsersConsoleState extends State<UsersConsole> {
               ));
   }
 }
-
-showAlertDialog(context) => showCupertinoDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: Text('permissionDenied'.tr()),
-        content: Text('permissionDeniedMessage'.tr()),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('cancel'.tr()),
-          ),
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () => openAppSettings(),
-            child: Text('permissionDeniedSettings'.tr()),
-          ),
-        ],
-      ),
-    );

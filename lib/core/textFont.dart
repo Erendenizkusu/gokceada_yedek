@@ -1,126 +1,142 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gokceada/core/colors.dart';
 
 /// Typographic scale for the app (referenced as `TextFonts.instance.<name>`).
 ///
-/// Pairing: **Fraunces** (a characterful high-contrast serif) carries the
-/// display/heading roles, giving the island guide a warm Mediterranean voice;
-/// **Poppins** (already bundled) stays for body/UI text. Fraunces is served via
-/// the `google_fonts` package (fetched and cached at runtime).
-///
-/// Legacy field names are preserved so existing widgets keep compiling; the
-/// heading styles now render in Fraunces.
+/// The app's original ("göz bebeği") UI used **Poppins** — a clean, geometric,
+/// Google-Sans-flavoured face. Poppins is **bundled as an asset** in
+/// `pubspec.yaml` (`assets/fonts/Poppins-Regular.ttf` + `-Bold.ttf`), so the
+/// whole scale below uses `fontFamily: 'Poppins'` directly. This guarantees the
+/// correct face offline and instantly — unlike `google_fonts`, which fetches
+/// over the network and silently falls back to the system font (Roboto) when
+/// the download fails, which is exactly what made earlier builds look wrong.
 class TextFonts {
   static TextFonts instance = TextFonts._init();
 
   TextFonts._init();
 
-  // ---- Display / heading roles — Fraunces ----------------------------------
-  final appBarTitle = GoogleFonts.fraunces(
-    fontSize: 24,
+  static const String _family = 'Poppins';
+
+  // ---- Display / heading roles ---------------------------------------------
+  final appBarTitle = const TextStyle(
+    fontFamily: _family,
+    fontSize: 22,
     color: Colors.white,
     fontWeight: FontWeight.w600,
+    letterSpacing: 0.2,
   );
 
-  final appBarTitleColor = GoogleFonts.fraunces(
-    fontSize: 24,
-    color: ColorConstants.instance.sea,
+  final appBarTitleColor = TextStyle(
+    fontFamily: _family,
+    fontSize: 22,
+    color: ColorConstants.instance.ink,
     fontWeight: FontWeight.w600,
+    letterSpacing: 0.2,
   );
 
-  final titleFont = GoogleFonts.fraunces(
-    color: ColorConstants.instance.sea,
-    fontSize: 24,
-    fontWeight: FontWeight.w600,
+  /// Large place/detail title ("Örnek Motel", "Son Vapur Meyhane").
+  final titleFont = TextStyle(
+    fontFamily: _family,
+    color: ColorConstants.instance.ink,
+    fontSize: 26,
+    fontWeight: FontWeight.w500,
   );
 
-  final middleTitle = GoogleFonts.fraunces(
-    fontSize: 21,
+  /// Section heading on detail pages ("Tesis Özellikleri", "İletişim") and
+  /// list-card place names.
+  final middleTitle = TextStyle(
+    fontFamily: _family,
+    fontSize: 20,
     color: ColorConstants.instance.ink,
     fontWeight: FontWeight.w600,
   );
 
-  /// Compact section heading used above lists/carousels.
-  final sectionTitle = GoogleFonts.fraunces(
-    fontSize: 19,
-    color: ColorConstants.instance.ink,
+  /// Compact section heading used above home lists/carousels ("Keşfet", ...).
+  /// Kept in the natural olive tone for the home page's warm identity.
+  final sectionTitle = TextStyle(
+    fontFamily: _family,
+    fontSize: 20,
+    color: ColorConstants.instance.olive,
     fontWeight: FontWeight.w600,
+    letterSpacing: -0.2,
   );
 
-  /// Label drawn on top of images (category tiles, news cards).
-  final imageFront = GoogleFonts.fraunces(
+  /// Label drawn on top of images (category tiles, news cards, beaches).
+  final imageFront = const TextStyle(
+    fontFamily: _family,
     color: Colors.white,
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: FontWeight.w600,
+    letterSpacing: 0.2,
+    height: 1.12,
   );
 
-  // ---- Body / UI roles — Poppins -------------------------------------------
+  // ---- Body / UI roles -----------------------------------------------------
   final smallText = const TextStyle(
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w700,
+    fontFamily: _family,
+    fontWeight: FontWeight.w500,
     color: Colors.white,
-    fontSize: 13.5,
+    fontSize: 13,
   );
 
   /// Uppercase eyebrow / overline used above section titles.
   final eyebrow = TextStyle(
-    fontFamily: 'Poppins',
-    fontSize: 11,
-    letterSpacing: 1.8,
-    fontWeight: FontWeight.w700,
-    color: ColorConstants.instance.seaMid,
+    fontFamily: _family,
+    fontSize: 11.5,
+    letterSpacing: 1.4,
+    fontWeight: FontWeight.w600,
+    color: ColorConstants.instance.sea,
   );
 
   final commentTextBold = TextStyle(
-    fontFamily: 'Poppins',
-    fontSize: 18,
-    color: ColorConstants.instance.commentColor,
-    fontWeight: FontWeight.w600,
+    fontFamily: _family,
+    fontSize: 16,
+    color: ColorConstants.instance.mist,
+    fontWeight: FontWeight.w500,
   );
 
   final explanationTextBold = TextStyle(
-    fontFamily: 'Poppins',
-    fontSize: 16,
+    fontFamily: _family,
+    fontSize: 15,
     color: ColorConstants.instance.mist,
     fontWeight: FontWeight.w400,
-    height: 1.55,
+    height: 1.6,
   );
 
   final commentTextThin = TextStyle(
-    fontFamily: 'Poppins',
-    fontSize: 15,
-    color: ColorConstants.instance.commentColor,
-    fontWeight: FontWeight.w300,
+    fontFamily: _family,
+    fontSize: 14,
+    color: ColorConstants.instance.mist,
+    fontWeight: FontWeight.w400,
   );
 
   final priceFont = TextStyle(
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w700,
+    fontFamily: _family,
+    fontWeight: FontWeight.w600,
     fontSize: 22,
     color: ColorConstants.instance.sea,
   );
 
   final underlineFont = TextStyle(
-    fontFamily: 'Poppins',
+    fontFamily: _family,
     color: ColorConstants.instance.coral,
     decoration: TextDecoration.underline,
     decorationColor: ColorConstants.instance.coral,
-    fontWeight: FontWeight.w600,
-    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    fontSize: 15,
   );
 
   final imageFrontRating = const TextStyle(
-    fontFamily: 'Montserrat',
+    fontFamily: _family,
     color: Colors.white,
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
   );
 
   final middleWhiteColor = const TextStyle(
-    fontFamily: 'Montserrat',
+    fontFamily: _family,
     color: Colors.white,
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
   );
 }

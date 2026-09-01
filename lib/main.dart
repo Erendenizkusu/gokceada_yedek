@@ -115,9 +115,9 @@ ThemeData _buildTheme() {
     seedColor: c.sea,
     primary: c.sea,
     onPrimary: Colors.white,
-    secondary: c.seaMid,
+    secondary: c.coral,
     onSecondary: Colors.white,
-    tertiary: c.coral,
+    tertiary: c.olive,
     onTertiary: Colors.white,
     surface: c.shell,
     onSurface: c.ink,
@@ -138,12 +138,13 @@ ThemeData _buildTheme() {
       iconTheme: IconThemeData(color: c.sea),
       titleTextStyle: TextFonts.instance.appBarTitleColor,
     ),
+    // Soft, diffuse card shadow (approx. blurRadius 12 / opacity 0.06).
     cardTheme: CardThemeData(
       color: c.shell,
-      elevation: 6,
-      shadowColor: c.sea.withValues(alpha: 0.18),
+      elevation: 3,
+      shadowColor: c.ink.withValues(alpha: 0.10),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
     inputDecorationTheme: InputDecorationTheme(
       labelStyle: TextStyle(color: c.commentColor),

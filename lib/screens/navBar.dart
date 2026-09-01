@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -103,10 +104,68 @@ class _NavBarState extends State<NavBar> {
               path: () =>
                   Navigator.of(context).popAndPushNamed('/usersConsole')),
           const Divider(),
+          if (user != null)
+            ListTile(
+              leading: Icon(Icons.delete_forever_outlined,
+                  color: Colors.red.shade400),
+              title: Text('hesabiSil'.tr(),
+                  style: TextStyle(color: Colors.red.shade400)),
+              onTap: () => _confirmDeleteAccount(context),
+            ),
           _signOutButton(context),
         ],
       ),
     );
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('hesabiSil'.tr()),
+        content: Text('hesapSilOnay'.tr()),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text('vazgec'.tr()),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text('sil'.tr(), style: const TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await _deleteAccount(context);
+    }
+  }
+
+  Future<void> _deleteAccount(BuildContext context) async {
+    final u = auth.currentUser;
+    if (u == null) return;
+    final uid = u.uid;
+    try {
+      // Best-effort: remove the user's profile document, then the auth account.
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+      if (GoogleSignIn().currentUser != null) {
+        await GoogleSignIn().disconnect();
+      }
+      await u.delete();
+      await auth.signOut();
+      if (!context.mounted) return;
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/homepage', (route) => false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('hesapSilindi'.tr())),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (!context.mounted) return;
+      final msg = e.code == 'requires-recent-login'
+          ? 'hesapSilTekrarGiris'.tr()
+          : (e.message ?? 'hesapSilTekrarGiris'.tr());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    }
   }
 
   Widget _userUid() {

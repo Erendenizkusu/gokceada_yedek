@@ -1,10 +1,14 @@
+import 'dart:io' show Platform;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gokceada/core/colors.dart';
 import 'package:gokceada/product/text_field_custom.dart';
+import 'package:gokceada/services/auth_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../core/textFont.dart';
 
@@ -133,7 +137,10 @@ class _LoginPageState extends State<LoginPage> {
                         _loginOrRegisterButton(),
                       ]),
                 ),
-                LoginScreenBottomSide(onTap: ()=> loginWithGoogle(),),
+                LoginScreenBottomSide(
+                  onTap: () => loginWithGoogle(),
+                  onApple: () => loginWithApple(),
+                ),
               ],
             ),
           ),
@@ -177,6 +184,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               LoginScreenBottomSide(
                 onTap: () => loginWithGoogle(),
+                onApple: () => loginWithApple(),
               ),
             ]),
           ),
@@ -292,12 +300,38 @@ class _LoginPageState extends State<LoginPage> {
       // Hata durumunda yapılacaklar
     }
   }
+
+  void loginWithApple() async {
+    try {
+      final UserCredential userCredential =
+          await AuthService().signInWithApple();
+
+      final String? username = userCredential.user?.displayName;
+      if (username != null && username.isNotEmpty) {
+        saveUsernameToFirestore(userCredential.user!.uid, username);
+      }
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('/usersConsole');
+    } on SignInWithAppleAuthorizationException catch (e) {
+      // User cancelled the Apple sheet — not an error worth surfacing.
+      if (e.code == AuthorizationErrorCode.canceled) return;
+      setState(() {
+        errorMessage = e.message;
+      });
+    } catch (error) {
+      print(error);
+      setState(() {
+        errorMessage = error.toString();
+      });
+    }
+  }
 }
 
 class LoginScreenBottomSide extends StatelessWidget {
   final Function()? onTap;
+  final Function()? onApple;
 
-  const LoginScreenBottomSide({super.key, this.onTap});
+  const LoginScreenBottomSide({super.key, this.onTap, this.onApple});
 
   @override
   Widget build(BuildContext context) {
@@ -312,6 +346,17 @@ class LoginScreenBottomSide extends StatelessWidget {
                   width: 80, child: Image.asset('images/google_icon.png'))),
         ],
       ),
+      // Apple requires "Sign in with Apple" when other social logins are
+      // offered (App Store Guideline 4.8). Only shown on iOS.
+      if (Platform.isIOS && onApple != null)
+        Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: SignInWithAppleButton(
+            onPressed: onApple!,
+            style: SignInWithAppleButtonStyle.black,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
+        ),
     ]);
   }
 }

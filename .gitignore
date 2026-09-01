@@ -48,3 +48,12 @@ app.*.map.json
 
 # Ignore Gradle build output directory
 build
+
+# Release signing secrets — never commit
+android/key.properties
+**/*.jks
+**/*.keystore
+
+# Admin script secrets & deps — never commit
+scripts/serviceAccountKey.json
+scripts/node_modules/

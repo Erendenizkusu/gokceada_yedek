@@ -93,5 +93,19 @@
   "kesfet": "Explore",
   "adayiTani": "About the Island",
   "adaEtiketi": "North Aegean · Cittaslow Island",
-  "tumu": "See all"
+  "tumu": "See all",
+  "hesabiSil": "Delete Account",
+  "hesapSilOnay": "Your account and data will be permanently deleted. This cannot be undone. Continue?",
+  "sil": "Delete",
+  "vazgec": "Cancel",
+  "hesapSilindi": "Your account has been deleted.",
+  "hesapSilTekrarGiris": "For security, please sign in again and retry.",
+  "yorum": "reviews",
+  "ara": "Call",
+  "konum": "Location",
+  "konumAciklama": "Open in maps and get directions",
+  "gokceadaKesfet": "Explore Gökçeada",
+  "kesfetPlaceholder": "Hotels, beaches, restaurants…",
+  "nereyeGitmek": "Where would you like to go?",
+  "qrMenu": "QR Menu"
 }

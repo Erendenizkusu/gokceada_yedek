@@ -8,18 +8,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:919333673755:android:556e785f5fae57dc1051be",
+        "mobilesdk_app_id": "1:919333673755:android:14b71c441d346f611051be",
         "android_client_info": {
-          "package_name": "com.gokceada.gokceadarehber"
+          "package_name": "com.gokceada.cepte"
         }
       },
       "oauth_client": [
         {
-          "client_id": "919333673755-6vo1vump3668v5fle8b308djvj1v0btt.apps.googleusercontent.com",
+          "client_id": "919333673755-mjrdlro3mar5bmj2h0qf62h591tcqi65.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.gokceada.gokceadarehber",
-            "certificate_hash": "364dae21c2fd368c302f359314a25693c01a3313"
+            "package_name": "com.gokceada.cepte",
+            "certificate_hash": "1d97885d1dd4a1932e927285f86856d38f3ab782"
+          }
+        },
+        {
+          "client_id": "919333673755-sbeecsb0qq9echc6kn6smvp1kc8337lt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gokceada.cepte",
+            "certificate_hash": "127e495036be66b4e443964f5e4e9f2cf95d4e4a"
           }
         },
         {
@@ -36,14 +44,58 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "919333673755-9ujfdvhsocvvbra2fv58qrrqrson1isi.apps.googleusercontent.com",
+              "client_id": "919333673755-tqrrbhogesci1ekj9p3dvtds64qckul9.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "919333673755-164bj9pbkik44jr7m5l6vca0lu6r0f15.apps.googleusercontent.com",
+              "client_id": "919333673755-e8k9kc0a92rhinv8t606cra1i05ntaj2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.gokceada.gokceadarehber.gokceada"
+                "bundle_id": "com.example.gokceada"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919333673755:android:556e785f5fae57dc1051be",
+        "android_client_info": {
+          "package_name": "com.gokceada.gokceadarehber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919333673755-ae3qpq8fhvkhia1h9cm2ij7ofd2n0a4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gokceada.gokceadarehber",
+            "certificate_hash": "57872a1cd5385b7509c50bcad5bb45f0147ac088"
+          }
+        },
+        {
+          "client_id": "919333673755-tqrrbhogesci1ekj9p3dvtds64qckul9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPFd-5utIlJQbFC7WcjuQpNNpttDvYEps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "919333673755-tqrrbhogesci1ekj9p3dvtds64qckul9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "919333673755-e8k9kc0a92rhinv8t606cra1i05ntaj2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gokceada"
               }
             }
           ]

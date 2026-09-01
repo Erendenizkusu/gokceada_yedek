@@ -41,6 +41,9 @@ class NetworkCardDesign extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   cardText,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
                   style: TextFonts.instance.imageFront,
                 ),
               ),

@@ -93,5 +93,19 @@
   "kesfet": "Explorează",
   "adayiTani": "Despre insulă",
   "adaEtiketi": "Marea Egee de Nord · Insulă Cittaslow",
-  "tumu": "Toate"
+  "tumu": "Toate",
+  "hesabiSil": "Șterge contul",
+  "hesapSilOnay": "Contul și datele tale vor fi șterse definitiv. Acțiunea este ireversibilă. Continuați?",
+  "sil": "Șterge",
+  "vazgec": "Anulează",
+  "hesapSilindi": "Contul tău a fost șters.",
+  "hesapSilTekrarGiris": "Din motive de securitate, autentifică-te din nou și reîncearcă.",
+  "yorum": "recenzii",
+  "ara": "Sună",
+  "konum": "Locație",
+  "konumAciklama": "Deschide pe hartă și obține traseul",
+  "gokceadaKesfet": "Explorează Gökçeada",
+  "kesfetPlaceholder": "Hoteluri, plaje, restaurante…",
+  "nereyeGitmek": "Unde ai vrea să mergi?",
+  "qrMenu": "Meniu QR"
 }

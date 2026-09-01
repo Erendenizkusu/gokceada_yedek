@@ -36,6 +36,7 @@ class SurfingDetay extends StatelessWidget {
             hotelName: l.name,
             location: l.location,
             rating: l.rating,
+            reviewCount: l.reviewCount,
             path: l.image,
           ),
           detail: (context, l) => SurfingView(
@@ -48,6 +49,7 @@ class SurfingDetay extends StatelessWidget {
             location: l.location,
             telNo: l.telNo,
             rating: l.rating,
+            reviewCount: l.reviewCount,
           ),
         ),
       ),

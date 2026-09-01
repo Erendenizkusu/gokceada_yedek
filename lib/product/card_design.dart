@@ -61,12 +61,18 @@ class CardDesign extends StatelessWidget {
               Image.asset(path, fit: BoxFit.cover),
               const _SeaScrim(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
                 child: Align(
                   alignment: Alignment.bottomLeft,
-                  child: Text(
-                    cardText,
-                    style: TextFonts.instance.imageFront,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      cardText,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: TextFonts.instance.imageFront,
+                    ),
                   ),
                 ),
               ),
@@ -91,9 +97,10 @@ class _SeaScrim extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             Colors.transparent,
-            ColorConstants.instance.seaDeep.withValues(alpha: 0.85),
+            ColorConstants.instance.seaDeep.withValues(alpha: 0.35),
+            ColorConstants.instance.seaDeep.withValues(alpha: 0.88),
           ],
-          stops: const [0.4, 1.0],
+          stops: const [0.35, 0.7, 1.0],
         ),
       ),
     );

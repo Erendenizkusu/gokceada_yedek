@@ -32,6 +32,7 @@ class OtelDetay extends StatelessWidget {
             hotelName: l.name,
             location: l.location,
             rating: l.rating,
+            reviewCount: l.reviewCount,
             path: l.image,
           ),
           detail: (context, l) => HotelRoomsView(
@@ -44,6 +45,8 @@ class OtelDetay extends StatelessWidget {
             location: l.location,
             telNo: l.telNo,
             path: l.image,
+            rating: l.rating,
+            reviewCount: l.reviewCount,
           ),
         ),
       ),

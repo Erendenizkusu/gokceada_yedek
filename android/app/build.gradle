@@ -13,20 +13,28 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+// Release signing config is kept out of source control in android/key.properties
+// (git-ignored). If it is missing, the release build falls back to debug signing.
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+
 android {
-    namespace "com.gokceada.gokceadarehber"
-    compileSdk 34
-    ndkVersion "26.1.10909125"
+    namespace "com.gokceada.cepte"
+    compileSdk 36
+    ndkVersion "28.2.13676358"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-        "-Xlint:unchecked"
-        "-Xlint:deprecation"
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 
     sourceSets {
@@ -34,20 +42,22 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.gokceada.gokceadarehber"
+        applicationId "com.gokceada.cepte"
         multiDexEnabled true
-        minSdk = 23
-        targetSdk = 34//flutter.targetSdkVersion
-        versionCode = 12
-        versionName = '1.2.0'
+        minSdkVersion = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = 16
+        versionName = '1.3.0'
     }
 
     signingConfigs {
-        mySigningConfig {
-            keyAlias 'myAlias'
-            keyPassword 'Oo11qq22ww+'
-            storeFile file('C:\\keystore\\keystore.jks')
-            storePassword 'Oo11qq22ww+'
+        release {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
 
@@ -55,7 +65,7 @@ android {
     buildTypes {
 
         release {
-            signingConfig signingConfigs.mySigningConfig
+            signingConfig keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
         }
     }
 
@@ -66,8 +76,6 @@ android {
 
     dependencies {
         implementation "com.google.android.gms:play-services-location:21.3.0"
-        implementation 'com.google.firebase:firebase-storage:21.0.0'
-        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0"
-        implementation platform('com.google.firebase:firebase-bom:33.1.2')
+        implementation platform('com.google.firebase:firebase-bom:33.7.0')
     }
 }

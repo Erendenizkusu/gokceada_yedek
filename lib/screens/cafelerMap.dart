@@ -30,6 +30,8 @@ class CafeDetay extends StatelessWidget {
           card: (context, l) => RestaurantsCard(
             restaurantName: l.name,
             rating: l.rating,
+            location: l.location,
+            reviewCount: l.reviewCount,
             path: l.image,
           ),
           detail: (context, l) => CafeView(
@@ -40,6 +42,7 @@ class CafeDetay extends StatelessWidget {
             path: l.image,
             location: l.location,
             rating: l.rating,
+            reviewCount: l.reviewCount,
           ),
         ),
       ),

@@ -72,95 +72,125 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final googleAds = context.watch<GoogleAds>();
     final news = context.watch<NewsProvider>();
+    final c = ColorConstants.instance;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       drawer: const NavBar(),
       appBar: AppBar(
-        title: const Text('Gökçeada'),
-        actions: [
-          IconButton(
-            tooltip: 'sizinGozunuzdenAda'.tr(),
-            icon: const Icon(Icons.photo_camera_outlined),
-            onPressed: () =>
-                Navigator.of(context).pushNamed('/usersConsole'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: c.sunset),
+        actionsIconTheme: IconThemeData(color: c.sunset),
+        title: ShaderMask(
+          shaderCallback: (rect) => LinearGradient(
+            colors: [c.sunGold, c.sunset],
+          ).createShader(rect),
+          blendMode: BlendMode.srcIn,
+          child: Text(
+            'Gökçeada',
+            style: TextFonts.instance.appBarTitleColor
+                .copyWith(color: Colors.white),
           ),
-        ],
+        ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      body: Stack(
         children: [
-          Text('adaEtiketi'.tr(), style: TextFonts.instance.eyebrow),
-          const SizedBox(height: 14),
-          if (news.hasNews) ...[
-            const _SectionHead(titleKey: 'guncelHaberler'),
-            const SizedBox(height: 12),
-            NewsCarousel(items: news.items),
-            const SizedBox(height: 8),
-          ],
-          const _SectionHead(titleKey: 'kesfet'),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 148,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: _categories.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) => SizedBox(
-                width: 152,
-                child: _categories[index],
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
+          const Positioned.fill(child: _SunsetAmbience()),
+          ListView(
+            padding: EdgeInsets.fromLTRB(
+                16,
+                MediaQuery.of(context).padding.top + kToolbarHeight + 8,
+                16,
+                24),
             children: [
-              CategoryChip(
-                  text: 'gormeyeDeger'.tr(),
-                  route: 'gezilecek',
-                  icon: Icons.remove_red_eye_outlined),
-              CategoryChip(
-                  text: 'neredeYenir'.tr(),
-                  route: 'foodareas',
-                  icon: Icons.restaurant_outlined,
-                  isAd: true,
-                  highlighted: true),
-              CategoryChip(
-                  text: 'aktiviteler'.tr(),
-                  route: 'activities',
-                  icon: Icons.surfing),
-              CategoryChip(
-                  text: 'atm'.tr(), route: 'atm', icon: Icons.atm_outlined),
-              CategoryChip(
-                  text: 'otobusSaatleri'.tr(),
-                  route: 'bus',
-                  icon: Icons.directions_bus_outlined,
-                  isAd: true),
-              CategoryChip(
-                  text: 'feribotSaatleri'.tr(),
-                  route: 'fery',
-                  icon: Icons.directions_ferry_outlined,
-                  isAd: true),
+              // 1) Güncel haberler — stays on top (the loved current design).
+              if (news.hasNews) ...[
+                const _SectionHead(titleKey: 'guncelHaberler'),
+                const SizedBox(height: 12),
+                NewsCarousel(items: news.items),
+                const SizedBox(height: 22),
+              ],
+              // 2) Keşfet — unchanged horizontal category cards.
+              const _SectionHead(titleKey: 'kesfet'),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 148,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _categories.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) => SizedBox(
+                    width: 152,
+                    child: _categories[index],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // 3) Tappable search bar (from the old UI) — opens the category
+              //    picker sheet. It is a button, not a text field.
+              const _SearchBarButton(),
+              const SizedBox(height: 16),
+              // 4) Horizontal, scrollable icon + label quick actions.
+              _QuickActionsRow(
+                items: [
+                  _QuickActionData(
+                    icon: Icons.landscape_rounded,
+                    label: 'gormeyeDeger'.tr(),
+                    route: 'gezilecek',
+                  ),
+                  _QuickActionData(
+                    icon: Icons.restaurant_rounded,
+                    label: 'neredeYenir'.tr(),
+                    route: 'foodareas',
+                    isAd: true,
+                  ),
+                  _QuickActionData(
+                    icon: Icons.kayaking_rounded,
+                    label: 'aktiviteler'.tr(),
+                    route: 'activities',
+                  ),
+                  _QuickActionData(
+                    icon: Icons.local_atm_rounded,
+                    label: 'atm'.tr(),
+                    route: 'atm',
+                  ),
+                  _QuickActionData(
+                    icon: Icons.directions_bus_rounded,
+                    label: 'otobusSaatleri'.tr(),
+                    route: 'bus',
+                    isAd: true,
+                  ),
+                  _QuickActionData(
+                    icon: Icons.directions_boat_rounded,
+                    label: 'feribotSaatleri'.tr(),
+                    route: 'fery',
+                    isAd: true,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 26),
+              // 5) Adayı tanı — kept.
+              const _SectionHead(titleKey: 'adayiTani'),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: CircularImagesTop(list: gokceadaPhotos),
+              ),
+              const SizedBox(height: 8),
+              Text('gezilecekKoyler'.tr(),
+                  style: TextFonts.instance.sectionTitle),
+              const SizedBox(height: 8),
+              Text('gezilecekKoylerAciklama'.tr(),
+                  style: TextFonts.instance.explanationTextBold),
+              const SizedBox(height: 16),
+              Text('koylarSahiller'.tr(),
+                  style: TextFonts.instance.sectionTitle),
+              const SizedBox(height: 8),
+              Text('koylarSahillerAciklama'.tr(),
+                  style: TextFonts.instance.explanationTextBold),
             ],
           ),
-          const SizedBox(height: 24),
-          const _SectionHead(titleKey: 'adayiTani'),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: CircularImagesTop(list: gokceadaPhotos),
-          ),
-          const SizedBox(height: 8),
-          Text('gezilecekKoyler'.tr(), style: TextFonts.instance.sectionTitle),
-          const SizedBox(height: 8),
-          Text('gezilecekKoylerAciklama'.tr(),
-              style: TextFonts.instance.explanationTextBold),
-          const SizedBox(height: 16),
-          Text('koylarSahiller'.tr(), style: TextFonts.instance.sectionTitle),
-          const SizedBox(height: 8),
-          Text('koylarSahillerAciklama'.tr(),
-              style: TextFonts.instance.explanationTextBold),
         ],
       ),
       bottomNavigationBar: googleAds.bannerAd != null
@@ -174,82 +204,297 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// Section heading with the signature coral "horizon" underline.
+/// Section heading ("Explore", "About the Island", ...) in the natural olive
+/// voice, with a warm sunset rule spanning the full width of the text.
 class _SectionHead extends StatelessWidget {
   const _SectionHead({required this.titleKey});
   final String titleKey;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(titleKey.tr(), style: TextFonts.instance.sectionTitle),
-        const SizedBox(height: 6),
-        Container(
-          width: 38,
-          height: 3,
-          decoration: BoxDecoration(
-            color: ColorConstants.instance.coral,
-            borderRadius: BorderRadius.circular(3),
-          ),
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: IntrinsicWidth(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(titleKey.tr(), style: TextFonts.instance.sectionTitle),
+            const SizedBox(height: 6),
+            Container(
+              height: 3,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    ColorConstants.instance.sunGold,
+                    ColorConstants.instance.sunset,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
 
-/// Pill-shaped quick-access chip for a home shortcut. Opens the named route,
-/// optionally firing an interstitial ad first.
-class CategoryChip extends StatelessWidget {
-  const CategoryChip({
-    super.key,
-    required this.text,
-    required this.route,
-    required this.icon,
-    this.isAd = false,
-    this.highlighted = false,
-  });
-
-  final String text;
-  final String route;
-  final IconData icon;
-  final bool isAd;
-  final bool highlighted;
+/// The "Gökçeada'da keşfet" search bar from the original UI. It is a tappable
+/// button (not an input); tapping opens the category picker bottom sheet.
+class _SearchBarButton extends StatelessWidget {
+  const _SearchBarButton();
 
   @override
   Widget build(BuildContext context) {
     final c = ColorConstants.instance;
-    final accent = highlighted ? c.coral : c.olive;
     return Material(
       color: c.shell,
-      shape: StadiumBorder(
-        side: BorderSide(
-          color: highlighted
-              ? c.coral.withValues(alpha: 0.45)
-              : c.sea.withValues(alpha: 0.14),
+      elevation: 0,
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: () => _showCategorySheet(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: c.lightGreyCardCollor),
+            boxShadow: [
+              BoxShadow(
+                color: c.ink.withValues(alpha: 0.05),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.search, color: c.sea, size: 26),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('gokceadaKesfet'.tr(),
+                        style: TextFonts.instance.middleTitle
+                            .copyWith(fontSize: 17)),
+                    const SizedBox(height: 1),
+                    Text('kesfetPlaceholder'.tr(),
+                        style: TextFonts.instance.commentTextThin),
+                  ],
+                ),
+              ),
+              Icon(Icons.tune, color: c.mist),
+            ],
+          ),
         ),
       ),
-      child: InkWell(
-        customBorder: const StadiumBorder(),
-        onTap: () {
-          if (isAd) context.read<GoogleAds>().loadInterstitialAd();
-          Navigator.pushNamed(context, '/$route');
-        },
+    );
+  }
+}
+
+/// A single category shown in the "Nereye gitmek istersin?" sheet.
+class _CategoryItem {
+  const _CategoryItem({required this.icon, required this.label, required this.route});
+  final IconData icon;
+  final String label;
+  final String route;
+}
+
+void _showCategorySheet(BuildContext context) {
+  final c = ColorConstants.instance;
+  final categories = <_CategoryItem>[
+    _CategoryItem(icon: Icons.hotel_rounded, label: 'oteller'.tr(), route: 'oteller'),
+    _CategoryItem(icon: Icons.night_shelter_rounded, label: 'pansionlar'.tr(), route: 'pansionList'),
+    _CategoryItem(icon: Icons.restaurant_rounded, label: 'restoranlar'.tr(), route: 'restaurantsView'),
+    _CategoryItem(icon: Icons.ramen_dining_rounded, label: 'neredeYenir'.tr(), route: 'foodareas'),
+    _CategoryItem(icon: Icons.beach_access_rounded, label: 'plajlar'.tr(), route: 'plajlar'),
+    _CategoryItem(icon: Icons.holiday_village_rounded, label: 'kampalanlari'.tr(), route: 'camping'),
+    _CategoryItem(icon: Icons.location_city_rounded, label: 'koyler'.tr(), route: 'koyler'),
+    _CategoryItem(icon: Icons.explore_rounded, label: 'gormeyeDeger'.tr(), route: 'gezilecek'),
+  ];
+
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: c.shell,
+    showDragHandle: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (sheetContext) {
+      return SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-          child: Row(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, size: 16, color: accent),
-              const SizedBox(width: 7),
+              Text('nereyeGitmek'.tr(), style: TextFonts.instance.titleFont),
+              const SizedBox(height: 8),
+              Flexible(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: categories.length,
+                  separatorBuilder: (_, __) =>
+                      Divider(height: 1, color: c.lightGreyCardCollor),
+                  itemBuilder: (context, index) {
+                    final cat = categories[index];
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(cat.icon,
+                          color: c.sea.withValues(alpha: 0.70), size: 24),
+                      title: Text(cat.label,
+                          style: TextFonts.instance.middleTitle.copyWith(
+                              fontSize: 16.5, fontWeight: FontWeight.w500)),
+                      trailing: Icon(Icons.chevron_right, color: c.mist),
+                      onTap: () {
+                        Navigator.of(sheetContext).pop();
+                        Navigator.pushNamed(context, '/${cat.route}');
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+/// A soft, page-wide sunset atmosphere behind the whole home screen.
+class _SunsetAmbience extends StatelessWidget {
+  const _SunsetAmbience();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = ColorConstants.instance;
+    return IgnorePointer(
+      child: Stack(
+        children: [
+          Positioned(
+            top: -150,
+            right: -90,
+            child: _Glow(color: c.sunset, size: 380, alpha: 0.14),
+          ),
+          Positioned(
+            top: 110,
+            left: -120,
+            child: _Glow(color: c.sunGold, size: 320, alpha: 0.12),
+          ),
+          Positioned(
+            bottom: 150,
+            left: -100,
+            child: _Glow(color: c.olive, size: 300, alpha: 0.06),
+          ),
+          Positioned(
+            bottom: -130,
+            right: -70,
+            child: _Glow(color: c.sea, size: 340, alpha: 0.06),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A single soft circular colour glow that fades to transparent.
+class _Glow extends StatelessWidget {
+  const _Glow({required this.color, required this.size, required this.alpha});
+
+  final Color color;
+  final double size;
+  final double alpha;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            color.withValues(alpha: alpha),
+            color.withValues(alpha: 0.0),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Data for a single home quick-action shortcut.
+class _QuickActionData {
+  const _QuickActionData({
+    required this.icon,
+    required this.label,
+    required this.route,
+    this.isAd = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final String route;
+  final bool isAd;
+}
+
+/// Horizontal, scrollable row of icon + label quick-action chips (bus/ferry
+/// times, ATMs, sights, ...), matching the restored UI's under-search shortcuts.
+class _QuickActionsRow extends StatelessWidget {
+  const _QuickActionsRow({required this.items});
+
+  final List<_QuickActionData> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 46,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        itemBuilder: (context, index) => _QuickActionChip(data: items[index]),
+      ),
+    );
+  }
+}
+
+class _QuickActionChip extends StatelessWidget {
+  const _QuickActionChip({required this.data});
+
+  final _QuickActionData data;
+
+  void _onTap(BuildContext context) {
+    if (data.isAd) context.read<GoogleAds>().loadInterstitialAd();
+    Navigator.pushNamed(context, '/${data.route}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = ColorConstants.instance;
+    return Material(
+      color: c.shell,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: () => _onTap(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: c.lightGreyCardCollor),
+          ),
+          child: Row(
+            children: [
+              Icon(data.icon, size: 20, color: c.sea),
+              const SizedBox(width: 8),
               Text(
-                text,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: highlighted ? c.coral : c.seaDeep,
+                data.label,
+                style: TextFonts.instance.commentTextBold.copyWith(
+                  fontSize: 14,
+                  color: c.ink,
                 ),
               ),
             ],

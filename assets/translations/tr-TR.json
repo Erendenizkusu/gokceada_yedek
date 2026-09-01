@@ -93,5 +93,19 @@
   "kesfet": "Keşfet",
   "adayiTani": "Adayı Tanı",
   "adaEtiketi": "Kuzey Ege · Cittaslow Ada",
-  "tumu": "Tümü"
+  "tumu": "Tümü",
+  "hesabiSil": "Hesabı Sil",
+  "hesapSilOnay": "Hesabın ve verilerin kalıcı olarak silinecek. Bu işlem geri alınamaz. Devam edilsin mi?",
+  "sil": "Sil",
+  "vazgec": "Vazgeç",
+  "hesapSilindi": "Hesabın silindi.",
+  "hesapSilTekrarGiris": "Güvenlik için lütfen tekrar giriş yapıp yeniden deneyin.",
+  "yorum": "yorum",
+  "ara": "Ara",
+  "konum": "Konum",
+  "konumAciklama": "Haritada aç ve yol tarifi al",
+  "gokceadaKesfet": "Gökçeada'da keşfet",
+  "kesfetPlaceholder": "Oteller, plajlar, restoranlar…",
+  "nereyeGitmek": "Nereye gitmek istersin?",
+  "qrMenu": "QR Menu"
 }

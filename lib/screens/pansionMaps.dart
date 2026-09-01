@@ -34,6 +34,7 @@ class PansionDetay extends StatelessWidget {
             hotelName: l.name,
             location: l.location,
             rating: l.rating,
+            reviewCount: l.reviewCount,
             path: l.image,
           ),
           detail: (context, l) {
@@ -54,6 +55,7 @@ class PansionDetay extends StatelessWidget {
               location: l.location,
               telNo: l.telNo,
               rating: l.rating,
+              reviewCount: l.reviewCount,
             );
           },
         ),

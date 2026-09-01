@@ -35,6 +35,10 @@ class GoogleAds with ChangeNotifier {
             if (showAfterLoad) showInterstitialAd();
           },
           onAdFailedToLoad: (LoadAdError error) {
+            debugPrint(
+              'AdMob interstitial YÜKLENEMEDI → code=${error.code} '
+              'domain=${error.domain} message=${error.message}',
+            );
           },
         ));
   }
@@ -54,6 +58,10 @@ class GoogleAds with ChangeNotifier {
           notifyListeners();
         },
         onAdFailedToLoad: (ad, err) {
+          debugPrint(
+            'AdMob banner YÜKLENEMEDI → code=${err.code} '
+            'domain=${err.domain} message=${err.message}',
+          );
           ad.dispose();
         },
       ),

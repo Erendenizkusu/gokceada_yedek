@@ -24,34 +24,31 @@ class _PlajlarViewState extends State<PlajlarView> {
   ];
   @override
   Widget build(BuildContext context) {
+    final c = ColorConstants.instance;
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: c.salt,
       appBar: AppBar(
-          title: Text('plajlar'.tr(),style: TextFonts.instance.middleTitle),
-          leading: Builder(builder: (context) {
-            return IconButton(onPressed: (){}, icon: BackButton(color: ColorConstants.instance.titleColor,));
-          },),
-          backgroundColor: const Color(0xffffc38c),
-          elevation: 0),
-          body: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-              gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xffffc38c),Colors.cyanAccent], // İstenilen renk geçişi burada tanımlanır
-          ),
-          ),
-          child:Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: ListView.builder(
-            itemCount: _plajList.length,
-            itemBuilder: (context,index){
-              return PlajCard(path: _plajList[index].path,name: _plajList[index].name,description: _plajList[index].description,navigator: _plajList[index].navigator);
-            }),
-          ),
+        backgroundColor: Colors.white,
+        elevation: 0.7,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back_ios_new, color: c.titleColor),
         ),
+        title: Text('plajlar'.tr(), style: TextFonts.instance.titleFont),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: ListView.builder(
+            padding: const EdgeInsets.only(top: 8, bottom: 16),
+            itemCount: _plajList.length,
+            itemBuilder: (context, index) {
+              return PlajCard(
+                  path: _plajList[index].path,
+                  name: _plajList[index].name,
+                  description: _plajList[index].description,
+                  navigator: _plajList[index].navigator);
+            }),
+      ),
     );
   }
 }
@@ -68,6 +65,7 @@ class PlajCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ColorConstants.instance;
     return InkWell(
       onTap: () {
         Navigator.push(context,
@@ -76,47 +74,81 @@ class PlajCard extends StatelessWidget {
           ));
       },
       child: Container(
-        margin: const EdgeInsets.all(7),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 0.7,
-            color: ColorConstants.instance.titleColor,
-          ),
-          borderRadius: BorderRadius.circular(12),
+          color: c.shell,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(width: 1, color: c.lightGreyCardCollor),
+          boxShadow: [
+            BoxShadow(
+              color: c.ink.withValues(alpha: 0.10),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
-        height: 300,
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              height: 200,
-              width: double.infinity,
-              child: Image.asset(path, fit: BoxFit.fill),
-            ),
-            Expanded(
-              child:Container(
-              padding: const EdgeInsets.all(9),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name, style: TextFonts.instance.middleTitle),
-                  Expanded( child:Text(
-                    description,
-                    style: const TextStyle(fontSize: 15,color: Colors.black),
-                    maxLines: 2,
+            // Image with the beach name overlaid bottom-left (reference style).
+            Stack(
+              children: [
+                SizedBox(
+                  height: 200,
+                  width: double.infinity,
+                  child: Image.asset(path, fit: BoxFit.cover),
+                ),
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.center,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.55),
+                        ],
+                      ),
+                    ),
                   ),
-                  )],
+                ),
+                Positioned(
+                  left: 16,
+                  bottom: 14,
+                  right: 16,
+                  child: Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextFonts.instance.imageFront.copyWith(
+                      fontSize: 20,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withValues(alpha: 0.6),
+                          blurRadius: 8,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              child: Text(
+                description,
+                style: TextFonts.instance.commentTextBold
+                    .copyWith(color: c.ink, fontSize: 15),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            )],
+          ],
         ),
       ),
     );
   }
 }
-

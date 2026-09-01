@@ -2,12 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gokceada/core/colors.dart';
 import 'package:gokceada/core/textFont.dart';
-import 'package:gokceada/product/imagePageView.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../product/countIndicator.dart';
-import '../product/navigationButton.dart';
+import '../product/detail_widgets.dart';
+import '../product/place_detail_scaffold.dart';
 
-class HotelRoomsView extends StatefulWidget {
+class HotelRoomsView extends StatelessWidget {
   const HotelRoomsView(
       {super.key,
       required this.description,
@@ -18,7 +17,9 @@ class HotelRoomsView extends StatefulWidget {
       required this.latitude,
       required this.longitude,
       required this.telNo,
-      required this.path});
+      required this.path,
+      this.rating = '',
+      this.reviewCount = 0});
 
   final double latitude;
   final double longitude;
@@ -29,99 +30,37 @@ class HotelRoomsView extends StatefulWidget {
   final String owner;
   final String telNo;
   final String path;
-
-  @override
-  State<HotelRoomsView> createState() => _HotelRoomsViewState();
-}
-
-class _HotelRoomsViewState extends State<HotelRoomsView> {
-  late PageController _controller;
-  int imageCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PageController();
-  }
-
-  void onImageCountUpdated(int count) {
-    setState(() {
-      imageCount = count;
-    });
-  }
+  final String rating;
+  final int reviewCount;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: [
-          Stack(children: [
-            Container(
-              clipBehavior: Clip.hardEdge,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
-              height: (MediaQuery.of(context).size.height) * 0.35,
-              child: ImagePageView(
-                  folderPath: widget.path,
-                  controller: _controller,
-                  onImageCountUpdated: onImageCountUpdated),
-            ),
-            Positioned(
-                top: 20,
-                left: 10,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon:
-                      const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                )),
-          ]),
-          Center(
-              child:
-                  CountIndicator(controller: _controller, count: imageCount)),
-          const SizedBox(height: 10),
-          Center(
-            child: NavigationButton(
-                latitude: widget.latitude, longitude: widget.longitude),
+    return PlaceDetailScaffold(
+      path: path,
+      name: hotelName,
+      location: location,
+      latitude: latitude,
+      longitude: longitude,
+      telNo: telNo,
+      rating: rating,
+      reviewCount: reviewCount,
+      sections: [
+        if (description.trim().isNotEmpty)
+          DetailSection(
+            title: 'tesisOzellikleri'.tr(),
+            child: Text(description,
+                style: TextFonts.instance.explanationTextBold),
           ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                width: 350,
-                child:
-                    Text(widget.hotelName, style: TextFonts.instance.titleFont),
-              ),
-              const SizedBox(height: 20),
-              Text(widget.location, style: TextFonts.instance.commentTextThin),
-              const SizedBox(height: 20),
-              Text('tesisOzellikleri'.tr(),
-                  style: TextFonts.instance.middleTitle),
-              const SizedBox(height: 20),
-              Text(
-                widget.description,
-                style: TextFonts.instance.commentTextBold,
-              ),
-              const SizedBox(height: 40),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('odaOzellikleri'.tr(),
-                    style: TextFonts.instance.middleTitle),
-                const SizedBox(height: 20),
-                Wrap(children: widget.facilities),
-              ]),
-              const SizedBox(height: 20),
-              OwnerCard(
-                owner: widget.owner,
-                telNumber: widget.telNo,
-              ),
-              const SizedBox(height: 20),
-            ]),
-          )
-        ],
-      ),
+        if (facilities.isNotEmpty)
+          DetailSection(
+            title: 'odaOzellikleri'.tr(),
+            child: Wrap(spacing: 10, runSpacing: 10, children: facilities),
+          ),
+        DetailSection(
+          title: 'iletisim'.tr(),
+          child: OwnerCard(owner: owner, telNumber: telNo),
+        ),
+      ],
     );
   }
 }
@@ -140,33 +79,51 @@ class OwnerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Uri phoneNumber = Uri.parse('tel:$telNumber');
 
+    final c = ColorConstants.instance;
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-          border:
-              Border.all(width: 0.5, color: ColorConstants.instance.titleColor),
-          borderRadius: BorderRadius.circular(8)),
+          color: c.shell,
+          border: Border.all(width: 1, color: c.lightGreyCardCollor),
+          borderRadius: BorderRadius.circular(14)),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(owner,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: ColorConstants.instance.titleColor,
-                    fontFamily: 'Poppins')),
-            Text(
-              '${'iletisim'.tr()}: $telNumber',
-              style: TextStyle(
-                  fontSize: 17, color: ColorConstants.instance.commentColor),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: c.sea.withValues(alpha: 0.10),
+              shape: BoxShape.circle,
             ),
-          ]),
+            child: Icon(Icons.person_outline, color: c.sea),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(owner,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextFonts.instance.middleTitle),
+                const SizedBox(height: 2),
+                Text('${'iletisim'.tr()}: $telNumber',
+                    style: TextFonts.instance.commentTextThin),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
           GestureDetector(
-            onTap: (() async {
+            onTap: () async {
               launchUrl(phoneNumber);
-            }),
-            child: const Icon(Icons.call, color: Colors.green),
+            },
+            child: Container(
+              padding: const EdgeInsets.all(11),
+              decoration: BoxDecoration(
+                color: c.sea.withValues(alpha: 0.10),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.call, color: c.sea),
+            ),
           ),
         ],
       ),
@@ -182,19 +139,22 @@ class ContainerMiddle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ColorConstants.instance;
     return Container(
-      margin: const EdgeInsets.only(right: 8, bottom: 8),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-              width: 0.5, color: ColorConstants.instance.titleColor)),
-      child: Padding(
-        padding: const EdgeInsets.all(7),
-        child: Wrap(children: [
-          Icon(icon, size: 30),
-          const SizedBox(width: 5),
-          Text(info, style: TextFonts.instance.middleTitle)
-        ]),
+          color: c.textFieldBacgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(width: 1, color: c.lightGreyCardCollor)),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 22, color: c.sea),
+          const SizedBox(width: 9),
+          Text(info,
+              style: TextFonts.instance.commentTextBold
+                  .copyWith(color: c.ink, fontSize: 15)),
+        ],
       ),
     );
   }

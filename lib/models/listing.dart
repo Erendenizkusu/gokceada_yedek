@@ -16,6 +16,8 @@ class Listing {
     required this.image,
     required this.location,
     required this.rating,
+    required this.reviewCount,
+    required this.placeId,
     required this.telNo,
     required this.link,
     required this.latLng,
@@ -30,7 +32,19 @@ class Listing {
   final String name;
   final String image;
   final String location;
+
+  /// Place rating (e.g. "4.7"). Now sourced from Google Places API and cached
+  /// in Firestore by the `refresh_ratings.js` script — no longer hand-entered.
   final String rating;
+
+  /// Number of Google reviews (`user_ratings_total`), cached from Places.
+  /// Shown as "(N yorum)" next to the rating; 0 hides the count.
+  final int reviewCount;
+
+  /// Google Place ID used by the refresh script to fetch [rating]/[reviewCount].
+  /// Resolved automatically from the venue name on first run and cached here.
+  final String placeId;
+
   final String telNo;
   final String link;
   final List<double> latLng;
@@ -38,6 +52,12 @@ class Listing {
   final List<String> icons;
   final String owner;
   final List<String> info;
+
+  /// Whether this listing has a usable numeric rating to display.
+  bool get hasRating {
+    final r = double.tryParse(rating);
+    return r != null && r > 0;
+  }
 
   /// The raw document data, kept for the few screens that read collection
   /// specific shapes (e.g. `activitiesList` stores `owner`/`telNo` as arrays).
@@ -62,6 +82,8 @@ class Listing {
       image: _str(data['image']),
       location: _str(data['location']),
       rating: _str(data['rating']),
+      reviewCount: _int(data['reviewCount']),
+      placeId: _str(data['placeId']),
       telNo: _firstOrStr(data['telNo']),
       link: _str(data['link']),
       latLng: _doubleList(data['latLng']),
@@ -74,6 +96,11 @@ class Listing {
   }
 
   static String _str(dynamic value) => value == null ? '' : value.toString();
+
+  static int _int(dynamic value) {
+    if (value is num) return value.toInt();
+    return int.tryParse('$value') ?? 0;
+  }
 
   /// Some collections store `telNo`/`owner` as a single string, others as a
   /// list. Return the first entry as a string in either case.

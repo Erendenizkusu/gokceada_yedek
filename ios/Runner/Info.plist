@@ -68,18 +68,16 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSContactsUsageDescription</key>
-	<string>Uygulamanın telefon numarasını aramak için telefon rehberine erişim sağlaması gerekiyor.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow access to your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow access to your location</string>
+	<string>Konumunuz, haritada size en yakın mekânları göstermek ve yol tarifi verebilmek için kullanılır.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) photo use</string>
+	<string>Mekân fotoğrafı eklerken galerinizden görsel seçebilmeniz için kullanılır.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Upload image from camera for screen background</string>
+	<string>Mekân fotoğrafı eklerken kameranızla fotoğraf çekebilmeniz için kullanılır.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>İzniniz, size daha alakalı reklamlar gösterebilmek için kullanılır. Reddetseniz de uygulama tam olarak çalışır.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

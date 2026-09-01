@@ -1,16 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:gokceada/core/ratingBar.dart';
 import 'package:gokceada/screens/hotel_rooms.dart';
 import '../core/colors.dart';
 import '../core/textFont.dart';
-import '../product/countIndicator.dart';
-import '../product/imagePageView.dart';
+import '../product/detail_widgets.dart';
 import '../product/indicatorWidget.dart';
+import '../product/place_detail_scaffold.dart';
 import '../helper/webview.dart';
-import '../product/navigationButton.dart';
 
-class RestaurantView extends StatefulWidget {
+class RestaurantView extends StatelessWidget {
   const RestaurantView(
       {super.key,
       required this.path,
@@ -20,10 +18,12 @@ class RestaurantView extends StatefulWidget {
       required this.link,
       required this.telNo,
       required this.latitude,
-      required this.longitude});
+      required this.longitude,
+      this.reviewCount = 0});
 
   final String path;
   final String rating;
+  final int reviewCount;
   final String name;
   final String location;
   final String link;
@@ -32,102 +32,69 @@ class RestaurantView extends StatefulWidget {
   final double longitude;
 
   @override
-  State<RestaurantView> createState() => _RestaurantViewState();
+  Widget build(BuildContext context) {
+    return PlaceDetailScaffold(
+      path: path,
+      name: name,
+      location: location,
+      latitude: latitude,
+      longitude: longitude,
+      telNo: telNo,
+      rating: rating,
+      reviewCount: reviewCount,
+      sections: [
+        DetailSection(
+          title: 'qrMenu'.tr(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('menuBilgilendirme'.tr(),
+                  style: TextFonts.instance.explanationTextBold),
+              const SizedBox(height: 12),
+              LinkCard(
+                icon: Icons.link,
+                title: 'qrMenu'.tr(),
+                onTap: () => openQrMenu(context, link),
+              ),
+            ],
+          ),
+        ),
+        DetailSection(
+          title: 'iletisim'.tr(),
+          child: OwnerCard(owner: name, telNumber: telNo),
+        ),
+      ],
+    );
+  }
 }
 
-class _RestaurantViewState extends State<RestaurantView> {
-  late PageController _controller;
-  int imageCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PageController();
-  }
-
-  void onImageCountUpdated(int count) {
-    setState(() {
-      imageCount = count;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var url = widget.link;
-
-
-    return Scaffold(
-      appBar: AppBar(),
-      body: ListView(children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-            height: (MediaQuery.of(context).size.height) * 0.35,
-            child: ImagePageView(controller: _controller, onImageCountUpdated: onImageCountUpdated,folderPath: widget.path),
-          ),
-          Center(child: CountIndicator(controller: _controller, count: imageCount)),
-          const SizedBox(height: 10),
-          Center(
-              child: NavigationButton(latitude: widget.latitude,longitude: widget.longitude),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              RatingBar(rating: widget.rating),
-              const SizedBox(height: 10),
-              Text(
-                widget.name,
-                style: TextFonts.instance.titleFont,
-              ),
-              Text(
-                widget.location,
-                style: TextFonts.instance.commentTextThin,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                  'menuBilgilendirme'.tr(),
-                  style: TextFonts.instance.commentTextBold),
-              const SizedBox(height: 8),
-              InkwellUnderline(
-                  name: 'QR Menu',
-                  onTap: widget.link != '' ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WebViewComponent(url: url, title: 'QR MENU')),
-                    );
-                  } : () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text('qrMenuBulunmuyor'.tr()),
-                          title: Text('qrMenuBulunamadi'.tr()),
-                          backgroundColor: ColorConstants.instance.lightGreyCardCollor,
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('tamam'.tr(), style: TextFonts.instance.commentTextThin),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-              ),
-              const SizedBox(height: 15),
-              OwnerCard(
-                  owner: widget.name,
-                  telNumber: widget.telNo,
-                  ),
-            ]),
-          )
-        ]),
-      ]),
+/// Opens a QR/web menu in the in-app webview, or shows a "no menu" dialog when
+/// the listing has no link. Shared by restaurant + cafe detail pages.
+void openQrMenu(BuildContext context, String link) {
+  if (link.isNotEmpty) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WebViewComponent(url: link, title: 'QR MENU'),
+      ),
+    );
+  } else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('qrMenuBulunmuyor'.tr()),
+          title: Text('qrMenuBulunamadi'.tr()),
+          backgroundColor: ColorConstants.instance.lightGreyCardCollor,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('tamam'.tr(),
+                  style: TextFonts.instance.commentTextThin),
+            ),
+          ],
+        );
+      },
     );
   }
 }

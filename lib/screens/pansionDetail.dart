@@ -1,12 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:gokceada/core/colors.dart';
 import 'package:gokceada/core/textFont.dart';
 import 'package:gokceada/screens/hotel_rooms.dart';
-import '../product/countIndicator.dart';
-import '../product/imagePageView.dart';
-import '../product/navigationButton.dart';
+import '../product/detail_widgets.dart';
+import '../product/place_detail_scaffold.dart';
 
-class PansionDetailView extends StatefulWidget {
+class PansionDetailView extends StatelessWidget {
   const PansionDetailView(
       {super.key,
       required this.path,
@@ -18,7 +17,8 @@ class PansionDetailView extends StatefulWidget {
       required this.rating,
       required this.latitude,
       required this.longitude,
-      required this.pansion_name});
+      required this.pansion_name,
+      this.reviewCount = 0});
 
   final String path;
   final String pansion_name;
@@ -30,149 +30,36 @@ class PansionDetailView extends StatefulWidget {
   final String owner;
   final String telNo;
   final String rating;
+  final int reviewCount;
 
-  @override
-  State<PansionDetailView> createState() => _PansionDetailViewState();
-}
-
-class _PansionDetailViewState extends State<PansionDetailView> {
-  late PageController _controller;
-  int imageCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PageController();
-  }
-
-  void onImageCountUpdated(int count) {
-    setState(() {
-      imageCount = count;
-    });
-  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: double.maxFinite,
-        width: double.maxFinite,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: MediaQuery.of(context).size.height * 0.6,
-              child: ImagePageView(controller: _controller, folderPath: widget.path,onImageCountUpdated: onImageCountUpdated),
-            ),
-            Positioned(
-              top: 40,
-                left: 10,
-                child: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.arrow_back_ios_new,
-                  color: Colors.white),
-            )),
-            Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: MediaQuery.of(context).size.height * 0.3,
-                child: Center(
-                    child: CountIndicator(controller: _controller, count: imageCount))),
-            const SizedBox(height: 10),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.38,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        topLeft: Radius.circular(20)),
-                    color: Colors.white,
-                    border: Border.all(
-                        width: 1.5, color: ColorConstants.instance.titleColor)),
-                height: ((MediaQuery.of(context).size.height) / 2) + 50,
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: ListView(children: [
-                    Center(
-                      child: NavigationButton(latitude: widget.latitude,longitude: widget.longitude),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(widget.pansion_name,
-                            style: TextFonts.instance.titleFont),
-                        /*Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                                children:[
-                              Text('500\$',style: TextFonts.instance.priceFont,),
-                                Text('per night',style: TextFonts.instance.commentTextThin,)])*/
-                      ],
-                    ),
-                    Text(widget.location,
-                        style: TextFonts.instance.commentTextThin),
-                    const SizedBox(height: 20),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Oda Özellikleri',
-                              style: TextFonts.instance.middleTitle),
-                          const SizedBox(height: 20),
-                          Wrap(children: widget.facilities),
-                        ]),
-                    const SizedBox(height: 20),
-                    Text('Tesis Özellikleri',
-                        style: TextFonts.instance.middleTitle),
-                    const SizedBox(height: 20),
-                    Text(
-                      widget.description,
-                      style: TextFonts.instance.commentTextBold,
-                    ),
-                    const SizedBox(height: 20),
-                    OwnerCard(
-                        owner: widget.owner,
-                        telNumber: widget.telNo,
-                        ),
-                    const SizedBox(height: 30),
-                  ]),
-                ),
-              ),
-            ),
-            Positioned(
-                top: MediaQuery.of(context).size.height * 0.36,
-                right: 25,
-                child: Container(
-                  height: 40,
-                  width: 75,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      border: Border.all(
-                          width: 1, color: ColorConstants.instance.titleColor)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                      ),
-                      Text(widget.rating,
-                          style: TextFonts.instance.commentTextThin)
-                    ],
-                  ),
-                ))
-          ],
-          //overflow: Overflow.visible,
+    return PlaceDetailScaffold(
+      path: path,
+      name: pansion_name,
+      location: location,
+      latitude: latitude,
+      longitude: longitude,
+      telNo: telNo,
+      rating: rating,
+      reviewCount: reviewCount,
+      sections: [
+        if (facilities.isNotEmpty)
+          DetailSection(
+            title: 'odaOzellikleri'.tr(),
+            child: Wrap(spacing: 10, runSpacing: 10, children: facilities),
+          ),
+        if (description.trim().isNotEmpty)
+          DetailSection(
+            title: 'tesisOzellikleri'.tr(),
+            child: Text(description,
+                style: TextFonts.instance.explanationTextBold),
+          ),
+        DetailSection(
+          title: 'iletisim'.tr(),
+          child: OwnerCard(owner: owner, telNumber: telNo),
         ),
-      ),
+      ],
     );
   }
 }
